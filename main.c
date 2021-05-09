@@ -2,96 +2,79 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Map.h"
+#include "pokemones.h"
+#include "list.h"
 
-typedef struct{
-    char title[50];
-    int year;
-}Book;
-
-Book* createBook(char* title, int year){
-    Book* b = (Book*) malloc (sizeof(Book));
-    strcpy(b->title,title);
-    b->year=year;
-    return b;
-}
-
-/*
-  función para comparar claves de tipo string
-  retorna 1 si son iguales
-*/
 int is_equal_string(void * key1, void * key2) {
     if(strcmp((char*)key1, (char*)key2)==0) return 1;
     return 0;
 }
 
-/*
-  función para comparar claves de tipo string
-  retorna 1 si son key1<key2
-*/
+//  función para comparar claves de tipo string
+//  retorna 1 si son key1<key2
+
 int lower_than_string(void * key1, void * key2) {
     if(strcmp((char*)key1, (char*)key2) < 0) return 1;
     return 0;
 }
 
-/*
-  función para comparar claves de tipo int
-  retorna 1 si son iguales
-*/
+//  función para comparar claves de tipo int
+//  retorna 1 si son iguales
+
 int is_equal_int(void * key1, void * key2) {
     if(*(int*)key1 == *(int*)key2) return 1;
     return 0;
 }
 
-/*
-  función para comparar claves de tipo int
-  retorna 1 si son key1<key2
-*/
+//  función para comparar claves de tipo int
+//  retorna 1 si son key1<key2
+
 int lower_than_int(void * key1, void * key2) {
     if(*(int*)key1 < *(int*)key2) return 1;
     return 0;
 }
 
-int main(int argc, const char * argv[]) {
-
-    //mapa con clave int
-    Map * books_by_year = createMap(is_equal_int);
-
-    //mapa con clave string
-    Map * books_by_title = createMap(is_equal_string);
-    setSortFunction(books_by_title,lower_than_string);
-
-    Book* b = createBook("The Lion, the Witch and the Wardrobe",1950);
-    insertMap(books_by_title, b->title, b);
-    insertMap(books_by_year, &b->year, b);
-
-    b = createBook("Ender's Game",1985);
-    insertMap(books_by_title, b->title, b);
-    insertMap(books_by_year, &b->year, b);
-
-    b = createBook("The Tibetan Book of Living and Dying",1992);
-    insertMap(books_by_title, b->title, b);
-    insertMap(books_by_year, &b->year, b);
-
-    b = createBook("Solaris",1961);
-    insertMap(books_by_title, b->title, b);
-    insertMap(books_by_year, &b->year, b);
-
-
-    printf("Libros ordeandos por nombre:\n");
-    b = firstMap(books_by_title);
-    while (b) {
-        printf("%s (%d)\n", b->title, b->year);
-        b = nextMap(books_by_title);
+int higher_than_int(void * key1, void * key2) {
+    if(*(int*)key1 > *(int*)key2) return 1;
+    return 0;
+}
+int main() {
+    //Mapa de pokemones segun que se ingresara para buscar
+    Map* pokemones_por_id = createMap(is_equal_int);
+    Map* pokemones_por_nombre = createMap(is_equal_string);
+    Map* pokemones_por_PC = createMap(is_equal_int);
+    Map* pokedex_por_nombre = createMap(is_equal_string);
+    Map* pokedex_por_numero = createMap(is_equal_int);
+    setSortFunction(pokedex_por_numero,lower_than_int);
+    setSortFunction(pokemones_por_PC,higher_than_int);
+    List* pokemones_por_tipo[18];
+    for(int i = 0; i < 18 ; i++){
+        pokemones_por_tipo[i] = create_list();
     }
+    //List* fuego, *agua, *veneno, *fantasma, *acero, *normal, *electrico, *psiquico, *planta;
+    //List* bicho, *tierra, *lucha, *roca, *hielo, *hada, *siniestro, *volador, *dragon;
+    /*
+    [0]fuego
+    [1]agua 
+    [2]veneno
+    [3]fantasma
+    [4]acero
+    [5]normal
+    [6]electrico
+    [7]psiquico
+    [8]planta
+    [9]bicho
+    [10]tierra
+    [11]lucha
+    [12]roca
+    [13]hielo
+    [14]hada
+    [15]siniestro
+    [16]volador
+    [17]dragon
+    */
 
-    int year=1950;
-    printf("\nBuscando libro del anno %d:\n",year);
-    b = searchMap(books_by_year,&year);
-    if(b)
-        printf("%s (%d)\n", b->title, b->year);
-    else 
-        printf("No existe el libro\n");
-
-
+    int opcion = -1;
+    menu_opciones(opcion, pokemones_por_id, pokemones_por_nombre, pokemones_por_tipo, pokedex_por_nombre, pokedex_por_numero, pokemones_por_PC);
     return 0;
 }
