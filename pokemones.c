@@ -10,6 +10,7 @@ void menu_opciones(int opcion,Map* pokemones_por_id, Map* pokemones_por_nombre, 
   Pokemon_pokedex *p;
   Pokemon_guardado *k;
   char nombre[20];
+  //se muestra el menu por pantalla
   while(opcion != 10){
     printf("\n|======================|\n");
     printf("|        Pokemon       |\n");
@@ -26,39 +27,54 @@ void menu_opciones(int opcion,Map* pokemones_por_id, Map* pokemones_por_nombre, 
     printf("10 - Salir\n");
     printf("~Ingrese el numero de la operacion que desee realizar: ");
     scanf("%d", &opcion);
+    //switch para que el programa realice lo que pide el usuario
     switch (opcion){
     case 1:
+     //pokemon p se situa al principio de la pokedex para poder recorrer el mapa y poser calcular cuantos pokemones hay almacenados en la variable
+     //"existencia"
         p=firstMap(pokedex_por_numero);
         existencia = 0;
         while(p!=NULL){
          existencia=existencia+p->existencia;
          p=nextMap(pokedex_por_numero); 
         }
+     //si la existencia es menor que 100 (que es la capacidad maxima) se podra agregar un pokemon
         if(existencia<100){
           leer_archivo(pokemones_por_id, pokemones_por_nombre,pokemones_por_tipo, pokedex_por_nombre, pokedex_por_numero, pokemones_por_PC);
+          //se vuelve a contar la cantidad de pokemones despues de agregar
+          p=firstMap(pokedex_por_numero);
+          existencia = 0;
+          while(p!=NULL){
+            existencia=existencia+p->existencia;
+          p=nextMap(pokedex_por_numero); 
+          }
         }else{
           printf("usted ya posee el limite de pokemons en el inventario %d/100\n");
         }
         printf("Usted posee %d/100 pokemones\n", existencia);
         break;
     case 2:
-        if(existencia==100){
-          printf("usted ya posee el limite de pokemons en el inventario %d/100\n", existencia);
-          break;
-        }
-        agregar_pokemon(pokemones_por_id, pokemones_por_nombre, pokemones_por_tipo, pokedex_por_nombre, pokedex_por_numero, pokemones_por_PC);
+      //se verifica que hayan menos de 100 pokemones
         p=firstMap(pokedex_por_numero);
-        existencia++;
-        printf("Usted posee %d pokemons\n", existencia);
+        existencia = 0;
+        while(p!=NULL){
+         existencia = existencia+p->existencia;
+         p=nextMap(pokedex_por_numero); 
+        }
+        if(existencia<100){
+          agregar_pokemon(pokemones_por_id, pokemones_por_nombre, pokemones_por_tipo, pokedex_por_nombre, pokedex_por_numero, pokemones_por_PC);
+        }else{
+          printf("usted ya posee el limite de pokemones en el inventario %d/100\n");
+        }
+        printf("Usted posee %d/100 pokemones\n", existencia);
+        if(existencia==100){
+          printf("usted ya posee el limite de pokemones en el inventario %d/100\n", existencia);
+          break;
+        }     
+        printf("Usted posee %d pokemones\n", existencia);
         break;
     case 3:
         evolucionar_pokemon(pokemones_por_id, pokemones_por_nombre,pokemones_por_tipo, pokedex_por_nombre,pokedex_por_numero);
-        p=firstMap(pokedex_por_numero);
-        while(p!=NULL){
-         existencia=existencia+p->existencia;
-         p=nextMap(pokedex_por_numero); 
-        }
-        printf("Usted posee %d pokemons\n", existencia);
         break;
     case 4:
         buscar_por_tipo(pokemones_por_tipo);
@@ -94,7 +110,11 @@ void menu_opciones(int opcion,Map* pokemones_por_id, Map* pokemones_por_nombre, 
     case 9:
         liberar_pokemon(pokemones_por_id, pokemones_por_nombre, pokemones_por_tipo, pokedex_por_nombre);
         p=firstMap(pokedex_por_numero);
-        existencia=existencia-1;
+        existencia = 0;
+        while(p!=NULL){
+         existencia=existencia+p->existencia;
+         p=nextMap(pokedex_por_numero); 
+        }
         printf("Usted posee %d pokemons\n", existencia);
         break;
     case 10:
@@ -112,6 +132,7 @@ void evolucionar_pokemon(Map* pokemones_por_id, Map* pokemones_por_nombre, List*
   int id;
   printf("~ingrese el id del pokemon que desea evolucionar: ");
   scanf("%d", &id);
+  //mensaje en caso de que el pokemon con el id ingresado no exista
   if(searchMap(pokemones_por_id, &id) == NULL){
     printf("El pokemon asociado al id ingresado no existe\n");
     return;
@@ -159,8 +180,6 @@ void evolucionar_pokemon(Map* pokemones_por_id, Map* pokemones_por_nombre, List*
       insertMap(pokedex_por_nombre, &pp2->nombre, pp2);
       insertMap(pokedex_por_numero, &pp2->numero_pokedex, pp2);
       }
-     
-      //averiguar tipos
     }
   }
 }
@@ -277,7 +296,7 @@ void leer_archivo(Map*pokemones_por_id, Map *pokemones_por_nombre,List **pokemon
   /* Aqui se almacenaran el archivo por linea. */
   char linea[1024];
 
-  /* Se define la variable 'datosBombero' con el fin de guardar el nombre y rut de los bomberos. */
+
   char *datospokemon;  
 
   /* Se define las variables 'pokemonI' tipo 'pokemonInv' y 'pokemonD' tipo 'PokemonDex', con el fin de almacenar todos los datos de los pokemon del archivo
@@ -286,16 +305,19 @@ void leer_archivo(Map*pokemones_por_id, Map *pokemones_por_nombre,List **pokemon
    Pokemon_guardado *pokemonI;
    Pokemon_pokedex *pokemonD; 
    Pokemon_pokedex *Pauxiliar;
-  /*Se va leyendo el archivo linea por linea. Siendo cada linea separada por comas, donde el primer dato leido sera el rut del bombero 
-   * por lo que se guarda en la variable 'bombero' apuntando al registro 'rut'. Lo mismo sucedera por los datos del nombre y la
-   * disponibilidad de cada bombero.
-   */
+
   while (fscanf(archivoEntrada, "%[^\n]s", linea) != EOF){
     fgetc(archivoEntrada);
     char caux=linea[0];
     const char comilla[2]={'"'};
     int len, g=0, flag=0;
     len=strlen(linea);
+    Pokemon_pokedex *p=firstMap(pokedex_por_numero);
+    int existencia = 0;
+    while(p!=NULL){
+    existencia=existencia+p->existencia;
+    p=nextMap(pokedex_por_numero); 
+    }     
     while(g<len){
       if(caux==comilla[0]){
         flag=1;
@@ -312,6 +334,7 @@ void leer_archivo(Map*pokemones_por_id, Map *pokemones_por_nombre,List **pokemon
    /*Se inserta la id*/
     datospokemon = strtok(linea, ",");
     pokemonI->id=atoi(datospokemon);
+    existencia++;
     
    /*Se inserta el nombre en el inventario y en la pokedex*/ 
     datospokemon = strtok(NULL, ",");
@@ -349,7 +372,7 @@ void leer_archivo(Map*pokemones_por_id, Map *pokemones_por_nombre,List **pokemon
     
     datospokemon = strtok(NULL, ",");               
     pokemonD->numero_pokedex=atoi(datospokemon);                   
-    
+  
     datospokemon = strtok(NULL, ",");
     strcpy(pokemonD->region,datospokemon);                    
     
@@ -372,9 +395,12 @@ void leer_archivo(Map*pokemones_por_id, Map *pokemones_por_nombre,List **pokemon
           insertar_por_tipos(pokemones_por_tipo, pokemonD);
         }
     }
+    if (existencia>=100){
+     printf("se llego a 100 pokemones antes de terminar de leer el archivo\n");
+     return;
+    }
     
    /*Se insertan los pokemones por tipo en la estructura correspondiente*/ 
-
   }
   /* Se cierra el archivo. */
   if (fclose(archivoEntrada) == EOF){
@@ -403,7 +429,7 @@ void insertar_por_tipos(List** pokemones_por_tipo, Pokemon_pokedex* pokemonD){
 	}
   //se consigue primer token
     char * token = strtok(aux1, " ");
-  //se compara primer token
+  //se compara e ingresa primer token
     if(stricmp(token, "fuego")==0){
       push_back(pokemones_por_tipo[0], pokemonD);
     }else if(stricmp(token, "agua")==0){
@@ -532,9 +558,13 @@ void buscar_por_tipo(List** pokemones_por_tipo){
     printf("No hay pokemones de ese tipo registrados actualmente"); 
     return;}
   else{
-    printf("%s\n",pp->nombre);
+    if(pp->existencia>0){
+      printf("%s\n",pp->nombre);
+    }
   }
   while ((pp = next(pokemones_por_tipo[i])) != NULL){
-    printf("%s\n",pp->nombre);
+    if(pp->existencia > 0){
+      printf("%s\n",pp->nombre);
+    }
   }
 }
