@@ -17,7 +17,7 @@ buscar por ID, etc.
 
 1 - Si se añaden dos pokemones distintos con el mismo numero_pokedex se agrega de todas formas.
 
-2 - Programa no valida que la informacion ingresada sea del tipo que se pide, por lo que se asume en la gran mayoria de casos que el usuario va a ingresar correctamente los datos solicitados.
+2 - Programa no valida que la informacion ingresada sea del tipo que se pide, por lo que se asume en la gran mayoria de casos que el usuario va a ingresar correctamente los datos solicitados (en caso de ser una cadena de caracteres, se asume que el usuario ingresara la primera letra en mayusculas).
 
 3 - Si se agrega más de un archivo al programa este comienza a hacer cosas raras.
 ----------------------------------------------------------------------
