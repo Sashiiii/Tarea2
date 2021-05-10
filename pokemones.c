@@ -77,10 +77,12 @@ void menu_opciones(int opcion,Map* pokemones_por_id, Map* pokemones_por_nombre, 
         evolucionar_pokemon(pokemones_por_id, pokemones_por_nombre,pokemones_por_tipo, pokedex_por_nombre,pokedex_por_numero);
         break;
     case 4:
-        buscar_por_tipo(pokemones_por_tipo);
+        buscar_por_tipo(pokemones_por_tipo, pokemones_por_nombre);
         break;
     case 5:
-        buscar_pokemon_por_nombre(pokemones_por_nombre);
+        printf("~Ingrese el nombre del pokemon: ");
+        scanf("%s", &nombre);
+        buscar_pokemon_por_nombre(pokemones_por_nombre, nombre);
         break;
     case 6:
         printf("~Ingrese el nombre del pokemon: ");
@@ -259,20 +261,24 @@ void agregar_pokemon(Map* pokemones_por_id, Map* pokemones_por_nombre, List** po
   return;
 }
 
-void buscar_pokemon_por_nombre(Map* pokemones_por_nombre){
-  char nombre[20];
+void buscar_pokemon_por_nombre(Map* pokemones_por_nombre, char nombre[20]){
+  int bandera=0;
   Pokemon_guardado* pg;
   //pg = (Pokemon_guardado *)malloc(sizeof(Pokemon_guardado));
-  printf("~ingrese el nombre del pokemon a buscar!\n");
-  scanf("%s", &nombre);
-  pg = searchMap(pokemones_por_nombre,&nombre);
-  if(pg != NULL){
+  pg = firstMap(pokemones_por_nombre);
+  while(pg != NULL){
+  if(strcmp(nombre,pg->nombre)==0){ 
     printf("\n~%s~:\n", pg->nombre);
     printf("ID: %d\n", pg->id);
     printf("sexo: %s\n", pg->sexo);
     printf("PC: %d\n", pg->PC);
     printf("PS: %d\n", pg->PS);
-  }else{
+    bandera=bandera+1;
+  }
+  pg=nextMap(pokemones_por_nombre);
+  }
+  
+  if(bandera==0){
     printf("No se ha encontrado al pokemon :c\n");
   }
 }
@@ -510,7 +516,7 @@ void insertar_por_tipos(List** pokemones_por_tipo, Pokemon_pokedex* pokemonD){
     }
 }
 
-void buscar_por_tipo(List** pokemones_por_tipo){
+void buscar_por_tipo(List** pokemones_por_tipo, Map* pokemones_por_nombre){
   char linea[20];
   Pokemon_pokedex *pp;
   printf("ingrese el tipo a buscar: \n~");
@@ -559,12 +565,12 @@ void buscar_por_tipo(List** pokemones_por_tipo){
     return;}
   else{
     if(pp->existencia>0){
-      printf("%s\n",pp->nombre);
+      buscar_pokemon_por_nombre(pokemones_por_nombre,pp->nombre);
     }
   }
   while ((pp = next(pokemones_por_tipo[i])) != NULL){
     if(pp->existencia > 0){
-      printf("%s\n",pp->nombre);
+      buscar_pokemon_por_nombre(pokemones_por_nombre,pp->nombre);
     }
   }
 }

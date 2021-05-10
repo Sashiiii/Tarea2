@@ -100,10 +100,7 @@ void insertMap(Map * list, void * key, void * value){
     Node* aux= list->head;
 
     //se revisa si el elemento existe
-    while(aux){
-        if(list->is_equal(aux->key,key)) return;
-        aux=aux->next;
-    }
+    
 
     if(list->lower_than==NULL) {
         _pushFront (list, key, value);
