@@ -17,13 +17,9 @@ buscar por ID, etc.
 
 1 - Si se añaden dos pokemones distintos con el mismo numero_pokedex se agrega de todas formas.
 
-2 - Al mostrar pokemones por tipo no se muestran los datos de cada uno.
- 
-3 - Funcion que busca en inventario por nombre muestra solo al primer pokemon que encuentra.
+2 - Programa no valida que la informacion ingresada sea del tipo que se pide, por lo que se asume en la gran mayoria de casos que el usuario va a ingresar correctamente los datos solicitados.
 
-4 - Programa no valida que la informacion ingresada sea del tipo que se pide, por lo que se asume en la gran mayoria de casos que el usuario va a ingresar correctamente los datos solicitados.
-
-5 - Si se agrega más de un archivo al programa este comienza a hacer cosas raras.
+3 - Si se agrega más de un archivo al programa este comienza a hacer cosas raras.
 ----------------------------------------------------------------------
 Aspectos positivos y a mejorar de cada integrante:
 
