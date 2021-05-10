@@ -10,6 +10,11 @@ IMPORTANTE:
 ----------------------------------------------------------------------
 Detalles del programa y otros:
 
+El programa solicitado para la Tarea 2 de Estructura de Datos tiene como fin realizar una serie de funciones aplicando los TDA de mapas para organizar y entregar la informacion
+de un inventario basado en el juego Pokemon, funciones basicas como: Verificar los Pokemon que hay en inventario y pokedex, buscar por tipo, ordenar segun Puntos de Combate(PC) buscar por nombre
+buscar por ID, etc.
+
+
 1 - Si se añaden dos pokemones distintos con el mismo numero_pokedex se agrega de todas formas.
 
 2 - Al mostrar pokemones por tipo no se muestran los datos de cada uno.
@@ -18,10 +23,7 @@ Detalles del programa y otros:
 
 4 - Programa no valida que la informacion ingresada sea del tipo que se pide, por lo que se asume en la gran mayoria de casos que el usuario va a ingresar correctamente los datos solicitados.
 
-5 - De manera general nuestro programa falla a la hora de implementar mapas en los cuales se necesita poder almacenar 2 o mas nodos con claves iguales debido a que no supimos adaptar el map.h
-y map.c facilitados para el desarrollo de la tarea, por ejemplo si se busca por nombre un pokemon y hay 2 pokemones de igual nombre, el programa mostrara el primero que encuentre.
-El problema especificamente es que utilizamos el primer mapa facilitado dentro del aula y su metodo de colisiones hace de que si dentro encuentra una key igual a la que queremos insertar la funcion
-va a detenerse y no va a insertar nada
+5 - Si se agrega más de un archivo al programa este comienza a hacer cosas raras.
 ----------------------------------------------------------------------
 Aspectos positivos y a mejorar de cada integrante:
 
